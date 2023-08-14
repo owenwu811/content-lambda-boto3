@@ -6,7 +6,8 @@ def create_snapshots(region):
 
     instances = ec2.instances.filter(
         Filters=[
-            {'Name': 'tag:backup', 'Values': ['true']}
+            {'Name': 'tag:backup', 
+             'Values': ['true']}
         ]
     )
 
