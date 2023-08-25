@@ -11,24 +11,18 @@ def create_snapshots(region):
         ]
     )
 
-    timestamp = datetime.utcnow().replace(microsecond=0).isoformat()
-    snapshots_created = []
+    timestamp, snapshots_created = datetime.utcnow().replace(microsecond=0).isoformat(), []
 
     for instance in instances.all():
         for volume in instance.volumes.all():
             description = f'Backup of {instance.id}, volume {volume.id}, created {timestamp}'
             print(description)
-
             snapshot = volume.create_snapshot(Description=description)
             snapshots_created.append(snapshot.id)
-
     return snapshots_created
 
 def lambda_handler(event, context):
-    ec2_client = boto3.client('ec2')
-    regions = [region['RegionName'] for region in ec2_client.describe_regions()['Regions']]
-
-    all_snapshots_created = []
+    ec2_client, regions,all_snapshots_created = boto3.client('ec2'), [region['RegionName'] for region in ec2_client.describe_regions()['Regions']], []
 
     for region in regions:
         print(f'Instances in EC2 Region {region}:')
