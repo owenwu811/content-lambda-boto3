@@ -1,15 +1,9 @@
-import json
-import os
-import urllib.request
-
-import boto3
-
+import json, os, boto3, urllib.request
 
 BUCKET_NAME = os.environ['BUCKET_NAME']
 
 s3 = boto3.resource('s3')
 transcribe = boto3.client('transcribe')
-
 
 def lambda_handler(event, context):
     job_name = event['detail']['TranscriptionJobName']
