@@ -1,23 +1,14 @@
-import os
-
-import boto3
+import os, boto3
 
 TABLE_NAME = os.environ['TABLE_NAME']
-
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table(TABLE_NAME)
-s3 = boto3.resource('s3')
-rekognition = boto3.client('rekognition')
-
+dynamodb, table, s3, rekognition = boto3.resource('dynamodb'), dynamodb.Table(TABLE_NAME), boto3.resource('s3'), boto3.client('rekognition')
 
 def lambda_handler(event, context):
 
     # Get the object from the event
-    bucket = event['Records'][0]['s3']['bucket']['name']
-    key = event['Records'][0]['s3']['object']['key']
+    bucket, key = event['Records'][0]['s3']['bucket']['name'], event['Records'][0]['s3']['object']['key']
 
-    obj = s3.Object(bucket, key)
-    image = obj.get()['Body'].read()
+    obj, image = s3.Object(bucket, key), obj.get()['Body'].read()
     print('Recognizing celebrities...')
     response = rekognition.recognize_celebrities(Image={'Bytes': image})
 
