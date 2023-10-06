@@ -1,16 +1,7 @@
-import json
-import mimetypes
-import os
-import threading
-import urllib.request
-import zipfile
+import json, mimetypes, os, threading, urllib.request, zipfile, boto3, cfnresponse
 from urllib.parse import urlparse
 
-import boto3
-import cfnresponse
-
 s3 = boto3.resource('s3')
-
 
 def lambda_handler(event, context):
     print(json.dumps(event))
